@@ -22,14 +22,14 @@ public class AppFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-
-		if (requestCount.get() >= MAX_REQUEST_COUNT) {
+		final int count = requestCount.incrementAndGet();
+		System.out.println(String.format("Server serving %s requests.", count));
+		if (count > MAX_REQUEST_COUNT) {
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
 			httpResponse.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			return;
 		}
 		try {
-			requestCount.incrementAndGet();
 			chain.doFilter(request, response);
 		} finally {
 			requestCount.decrementAndGet();
