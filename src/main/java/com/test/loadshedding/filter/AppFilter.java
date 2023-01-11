@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class AppFilter implements Filter {
 
@@ -23,7 +26,7 @@ public class AppFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		final int count = requestCount.incrementAndGet();
-		System.out.println(String.format("Server serving %s requests.", count));
+		log.info("Current inflight request number is {}", count);
 		if (count > MAX_REQUEST_COUNT) {
 			HttpServletResponse httpResponse = (HttpServletResponse) response;
 			httpResponse.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
